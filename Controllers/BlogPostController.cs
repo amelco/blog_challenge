@@ -1,3 +1,4 @@
+using blog.Dtos;
 using blog.Entities;
 using blog.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -18,31 +19,34 @@ namespace blog.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPost>>> Get()
+        public async Task<ActionResult<List<BlogPostDto>>> Get()
         {
             var result = await _blogRepository.Get();
             if (result == null)
             {
                 return NoContent();
             }
-            return Ok(result);
+            var postDtos = BlogPostDto.ListEntityToListDto(result);
+            return Ok(postDtos);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<BlogPost>> GetById([FromRoute] int id)
+        public async Task<ActionResult<BlogPostDto>> GetById([FromRoute] int id)
         {
             var result = await _blogRepository.GetById(id);
             if (result == null)
             {
                 return NoContent();
             }
-            return Ok(result);
+            var postDto = BlogPostDto.EntityToDto(result);
+            return Ok(postDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] BlogPost post)
+        public async Task<ActionResult> Post([FromBody] BlogPostDto postDto)
         {
+            var post = postDto.ToEntity();
             var result = await _blogRepository.Create(post);
             if (result == null)
             {

@@ -1,32 +1,74 @@
-﻿using blog.Interfaces;
+﻿using blog.Entities;
+using blog.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace blog.Repositories
 {
-    public class BasicRepository<T> : IBasicRepository<T>
+    public class BasicRepository<T> : IBasicRepository<T> where T : class
     {
-        Task<T> IBasicRepository<T>.Create(T item)
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<T> _dbSet;
+
+        public BasicRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _dbSet = _context.Set<T>();
         }
 
-        Task<T> IBasicRepository<T>.Update(int id, T item)
+        public async Task<T> Create(T item)
         {
-            throw new NotImplementedException();
+            if (item == null) return null!;
+            await _dbSet.AddAsync(item);
+            await _context.SaveChangesAsync();
+            return item;
         }
 
-        Task<T?> IBasicRepository<T>.GetById(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            var existing = await _dbSet.FindAsync(id);
+            if (existing == null) return;
+            _dbSet.Remove(existing);
+            await _context.SaveChangesAsync();
         }
 
-        public Task Delete(int id)
+        public async Task<T> Update(int id, T item)
         {
-            throw new NotImplementedException();
+            if (item == null) return null!;
+
+            IQueryable<T> query = _dbSet;
+            if (typeof(T) == typeof(BlogPost))
+            {
+                query = query.Include(nameof(BlogPost.Comments));
+            }
+
+            var existing = await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+            if (existing == null) return null!;
+
+            _context.Entry(existing).CurrentValues.SetValues(item);
+            await _context.SaveChangesAsync();
+            return existing;
         }
 
-        public Task<List<T>?> Get()
+        public async Task<List<T>?> Get()
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = _dbSet;
+            if (typeof(T) == typeof(BlogPost))
+            {
+                query = query.Include(nameof(BlogPost.Comments));
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<T?> GetById(int id)
+        {
+            IQueryable<T> query = _dbSet;
+            if (typeof(T) == typeof(BlogPost))
+            {
+                query = query.Include(nameof(BlogPost.Comments));
+            }
+
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
     }
 }

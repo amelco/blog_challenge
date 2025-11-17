@@ -2,10 +2,10 @@
 {
     public interface IBasicRepository<T>
     {
-        public Task<T> Create(T item);
-        public Task Delete(int id);
-        public Task<T> Update(int id, T item);
-        public Task<List<T>?> Get();
-        public Task<T?> GetById(int id);
+        Task<T> Create(T item);
+        Task Delete(int id);
+        Task<T> Update(int id, T item);
+        Task<List<T>?> Get();
+        Task<T?> GetById(int id);
     }
 }

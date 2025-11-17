@@ -1,9 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using blog.Middlewares;
+using Microsoft.EntityFrameworkCore;
 
 namespace blog
 {
     public static class AppExtensions
     {
+        public static void AddCustomMiddleware(this WebApplication app)
+        {
+            app.UseMiddleware<ExceptionMiddleware>();
+        }
+
         public static void CreateTables(this WebApplication app)
         {
             using (var scope = app.Services.CreateScope())

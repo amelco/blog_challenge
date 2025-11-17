@@ -1,6 +1,31 @@
 @blog_HostAddress = http://localhost:5170
 
-GET {{blog_HostAddress}}/weatherforecast/
+GET {{blog_HostAddress}}/api/posts
 Accept: application/json
+
+###
+
+GET {{blog_HostAddress}}/api/posts/1
+Accept: application/json
+
+###
+
+POST {{blog_HostAddress}}/api/posts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "First post",
+  "content": "This is the body of the first post.",
+  "comments": []
+}
+
+###
+
+POST {{blog_HostAddress}}/api/posts/1
+Content-Type: text/plain
+Accept: application/json
+
+This is a great article — thanks for sharing!
 
 ###

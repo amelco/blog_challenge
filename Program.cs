@@ -20,6 +20,8 @@ namespace blog
 
             var app = builder.Build();
 
+            app.AddCustomMiddleware();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

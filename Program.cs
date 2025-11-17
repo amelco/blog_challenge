@@ -15,14 +15,8 @@ namespace blog
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                                   ?? "Data Source=blog.db";
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(connectionString));
-
-            builder.Services.AddScoped<IBasicRepository<Comment>, BasicRepository<Comment>>();
-            builder.Services.AddScoped<IBasicRepository<BlogPost>, BasicRepository<BlogPost>>();
+            
+            builder.AddCustomServices();
 
             var app = builder.Build();
 

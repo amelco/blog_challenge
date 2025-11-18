@@ -57,7 +57,7 @@ namespace blog.Controllers
         }
 
         [HttpPost]
-        [Route("{id}")]
+        [Route("{id}/comments")]
         public async Task<ActionResult> Post([FromRoute] int id, [FromBody] string message)
         {
             var comment = new Comment

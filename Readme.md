@@ -33,11 +33,14 @@ blog/
 After cloning the repository, execute:
 
 ```bash
+cd blog_challenge
 dotnet restore
 dotnet run
 ```
 
-The API will be available at [https://localhost:7079](https://localhost:7079) and [http://localhost:5170](http://localhost:5170).
+The API will be available at [https://localhost:7079/swagger](https://localhost:7079/swagger) or [http://localhost:5170/swagger](http://localhost:5170/swagger).
+
+You can use swagger UI to test the endpoints.
 
 ## Development Notes
 ### Technical Decisions

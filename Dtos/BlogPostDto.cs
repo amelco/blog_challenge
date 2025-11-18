@@ -41,4 +41,18 @@ namespace blog.Dtos
             return postDtos;
         }
     }
+
+    public class BlogPostCreateDto
+    {
+        public string? Title { get; set; }
+        public string? Content { get; set; }
+        public BlogPost ToEntity()
+        {
+            return new BlogPost
+            {
+                Title = this.Title ?? "",
+                Content = this.Content ?? "",
+            };
+        }
+    }
 }

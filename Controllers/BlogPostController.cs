@@ -44,7 +44,7 @@ namespace blog.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] BlogPostDto postDto)
+        public async Task<ActionResult> Post([FromBody] BlogPostCreateDto postDto)
         {
             var post = postDto.ToEntity();
             var result = await _blogRepository.Create(post);
@@ -52,7 +52,8 @@ namespace blog.Controllers
             {
                 return BadRequest();
             }
-            return Ok();
+            var createdPostDto = BlogPostDto.EntityToDto(result);
+            return Ok(createdPostDto);
         }
 
         [HttpPost]
